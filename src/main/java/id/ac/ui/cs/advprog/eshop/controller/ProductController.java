@@ -25,6 +25,10 @@ public class ProductController {
 
     @PostMapping("/create")
     public String createProductPost(@ModelAttribute Product product, Model model) {
+        if (product.getProductQuantity() < 0) {
+            model.addAttribute("error", "Quantity tidak boleh negatif");
+            return "createProduct";
+        }
         service.create(product);
         return "redirect:/product/list";
     }
@@ -44,7 +48,11 @@ public class ProductController {
     }
 
     @PostMapping("/edit")
-    public String editProductPost(@ModelAttribute Product product) {
+    public String editProductPost(@ModelAttribute Product product, Model model) {
+        if (product.getProductQuantity() < 0) {
+            model.addAttribute("error", "Quantity tidak boleh negatif");
+            return "editProduct";
+        }
         service.update(product);
         return "redirect:/product/list";
     }
